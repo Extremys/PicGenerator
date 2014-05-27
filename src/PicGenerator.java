@@ -11,11 +11,11 @@ public class PicGenerator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		JPEGCreator nouveau = new JPEGCreator();
+		Vue nouveau = new Vue();
 	       
 	       String nomFichier="Test1";
 	    	
-	       nouveau.generate( nomFichier );
+	       //nouveau.generate( nomFichier );
 
 	       System.out.println( "Image générée." );
 	       
