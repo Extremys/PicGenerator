@@ -1,4 +1,4 @@
 
-public class Fond extends Vue{
+public class Fond {
 
 }
