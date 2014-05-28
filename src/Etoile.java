@@ -28,6 +28,8 @@ public class Etoile extends Astre{
 		this.rayon = rayon;
 	}
 	
-	
+	public void generationEtoile(){
+		
+	}
 
 }

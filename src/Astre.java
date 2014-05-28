@@ -1,5 +1,5 @@
 
-public abstract class Astre {
+public abstract class Astre extends Vue{
 	
 	private int x; //Coordonnées du centre de l'objet
 	private int y;

@@ -3,7 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 
-public class PicGenerator {
+public class PicGenerator { //classe main déplaçable dans Vue????
 
 	/**
 	 * @param args
@@ -27,6 +27,7 @@ public class PicGenerator {
 		   	JLabel label = new JLabel(img);
 		   	f.add(label);
 		   	f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		   	f.setLocationRelativeTo(null);
 		   	f.setVisible(true);
 		   	
 	}

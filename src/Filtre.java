@@ -1,7 +1,7 @@
 import java.awt.Color;
 
 
-public class Filtre {
+public class Filtre { // plutôt filtre visuel de floutage...etc...
 	
 	private double lambda; //Pour un filtre ne laissant passer qu'une longueur d'onde
 	
