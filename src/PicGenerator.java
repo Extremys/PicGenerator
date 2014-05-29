@@ -22,8 +22,9 @@ public class PicGenerator { //classe main déplaçable dans Vue????
 		
 		Vue vue = new Vue(600,600,image,impr,filter);
 		
-		
-		vue.dessinerFond(10);
+		vue.dessinerFond(1);
+		//vue.enregistrerVue("test.jpg");
+		vue.dessineEtoile(100);
 		vue.enregistrerVue("test.jpg");
 		vue.afficherVue("Exemple");
 		

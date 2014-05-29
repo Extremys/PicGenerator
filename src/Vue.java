@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -222,6 +224,7 @@ public class Vue { //ici qu'on va assembler l'image par écritures successives  d
 	   	JLabel label = new JLabel(capture);
 	   	f.add(label);
 	   	f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	   	f.setLocationRelativeTo(null);
 	   	f.setVisible(true);
 	   	copieVue.delete(); //on efface la copie créée vérifier si c'est un dossier...
 	   	
@@ -235,9 +238,10 @@ public void dessinerFond(double seuilBruit /*en pourcentage*/){
 		
 		int h = this.getHauteur();
 		int l= this.getLargeur();
+		int x,y;
 		double lambdaBorne= this.getFiltre().getLambdaAbsBorne();
 		double largeurBande= this.getFiltre().getLargeurBande();
-		double lambdaBruit=0.0;
+		double lambdaBruit;
 		
 		
 		this.image = new BufferedImage( PIX_SIZE * h, PIX_SIZE * l, 
@@ -252,23 +256,26 @@ public void dessinerFond(double seuilBruit /*en pourcentage*/){
 
             for( int j =0; j < l; j++ ){
 
-                h = i * PIX_SIZE;
+                x = i * PIX_SIZE;
 
-                l = j * PIX_SIZE;
+                y = j * PIX_SIZE;
 
 
+
+                //System.out.println(lambdaBorne);
             	lambdaBruit= (aleatoire.nextInt((int)seuilBruit*10)*largeurBande/2)+lambdaBorne;
             	
-            	System.out.println("Longueur d'onde écrite (avec bruit) = "+lambdaBruit+" nm.");
-            	int nivGris=(int)(lambdaBruit/lambdaBorne);// Pour prendre en compte le decalage 1 -> 255 RGB
-            	   
+            	//System.out.println("Longueur d'onde écrite (avec bruit) = "+lambdaBruit+" nm.");
+            	int nivGris=(int)(lambdaBruit%lambdaBorne);// Pour prendre en compte le decalage 1 -> 255 RGB
+            	//System.out.println(nivGris);
             	if(nivGris>=0){
             		
                    this.impression.setColor( new Color(nivGris, nivGris, nivGris) );
+                   //System.out.println(this.impression.getColor());
             	   
             	}
             	
-            	else
+            	else{
 
             		System.out.println("Erreur");
             		System.out.println(this.impression.getColor());
@@ -277,15 +284,93 @@ public void dessinerFond(double seuilBruit /*en pourcentage*/){
 
                //fil the rectangles with the pixel blocks in chosen color
                
-               System.out.println(this.impression.getColor());
+               //System.out.println(this.impression.getColor());
                
-               this.impression.fillRect( l, h , PIX_SIZE , PIX_SIZE );
+               this.impression.fillRect( y, x , PIX_SIZE , PIX_SIZE );
 
             }
 
 
         }
-		
+		this.impression.dispose();
 		
 	}
 
+
+//On suppose qu'avant d'avoir appelé cette méthode on a déjà un fond écrit dur l'image
+public void dessineEtoile( int nbEtoile /*int rayonMax en px*/){ //Dessiner une seule instance d'étoile OK mais plusieurs méthodes dans classe Vue
+	
+	
+	Random aleatoire = new Random();
+	int PIX_SIZE = 1; //Défini la granularité d'écriture
+	
+	
+	int h = this.getHauteur(); //Résolution
+	int l= this.getLargeur();
+	int x,y; //Variables de parcours de la matrice image
+	double lambdaEff= this.getFiltre().getLambda();
+	//double lambdaBruit; //Param du bruit artificiel introduit
+	//WritableRaster imgModif = this.image.getRaster();
+
+	
+	//this.image = new BufferedImage( PIX_SIZE * h, PIX_SIZE * l, 
+
+           // BufferedImage.TYPE_3BYTE_BGR ); //création de l'image, format
+	
+	this.impression=(Graphics2D)this.image.getGraphics(); //conversion 
+	
+	int rayonMax=7; //Rayon maximal que peut avoir une étoile
+	
+	for(int k=0; k<nbEtoile; k++){ //On parcourt k fois l'image pour écrire les k etoiles
+	
+		int x0=aleatoire.nextInt(l);
+		int y0=aleatoire.nextInt(h);
+		int R=aleatoire.nextInt(rayonMax);
+		Astre etoile = new Etoile(x0, y0, R); //par défaut l'étoile sera sur lambdaEff
+	
+	    for( int i =0; i < h; i++ ){
+	
+
+	        for( int j =0; j < l; j++ ){
+	
+	            x = i * PIX_SIZE;
+	
+	            y = j * PIX_SIZE;
+	//
+	            if ( (( x-x0)*( x-x0))+(( y-y0)*( y-y0)) < R*R ){
+	
+	         	   int nivGris=255;		//notion lambda à rajouter
+
+	               this.impression.setColor( new Color(nivGris, nivGris, nivGris) );
+	               //System.out.println(this.impression.getColor());
+	               
+	               System.out.println(lambdaEff+" "+this.impression.getColor());
+	               this.impression.fillRect( y, x , PIX_SIZE , PIX_SIZE );
+	        	}
+	        	
+	        	else{
+	
+	        		//int nivGris=0;
+	        		//this.impression.setColor( new Color(nivGris, nivGris, nivGris) );
+	        		//System.out.println("Erreur");
+	        		//System.out.println(this.impression.getColor());
+	        	   
+	        	}
+	
+	           //fil the rectangles with the pixel blocks in chosen color
+	           
+	           //System.out.println(this.impression.getColor());
+	           
+	           
+	
+	        }
+
+
+    	}
+	}
+	this.impression.dispose();
+
+}
+
+
+}

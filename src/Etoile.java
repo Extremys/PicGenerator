@@ -37,111 +37,81 @@ public class Etoile extends Astre{
 		
 	}
 
-	
-	/*public void dessineEtoile(Vue vue){
+	/*
+	 * 
+	public void dessineEtoileSur(Vue vue, int nbEtoile){ //Dessiner une seule instance d'étoile OK mais plusieurs méthodes dans classe Vue
 		
 		Random aleatoire = new Random();
+		int PIX_SIZE = 1; //Défini la granularité d'écriture
 		
-		double variationLuminosite=0.1;//Pourcentage de variation possible autour de la longueur d'onde max
-        int number= 15; //nombre d'étoiles
-        int x,y = 0;
+		int h = this.getHauteur();
+		int l= this.getLargeur();
+		int x,y;
+		double lambdaBorne= this.getFiltre().getLambdaAbsBorne();
+		double largeurBande= this.getFiltre().getLargeurBande();
+		double lambdaBruit;
+		
+		
+		this.image = new BufferedImage( PIX_SIZE * h, PIX_SIZE * l, 
 
-        int PIX_SIZE = 1; //Défini la granularité d'écriture
-
-
-
-        //image size in pixel blocks
-
-        int X = 500;
-
-        int Y = 500;
-
-        
-        
-        int R=50;
-        int teinte=0;
-        int seuilmax=10;
-        int seuilmin=100;
-        
-        //for( int k =0; k < number; k++ ){
-        int x0=250;
-        int y0=250;
-        //Color couleur = new Color(255, 255, 255);
-        //Color couleur = new Color(teinte, teinte, teinte);
-        
-        //int R0=50; //epaisseur de peau
-
-        BufferedImage bi = new BufferedImage( PIX_SIZE * X, PIX_SIZE * Y, 
-
-                                              BufferedImage.TYPE_3BYTE_BGR );
-
-        Graphics2D g=(Graphics2D)bi.getGraphics();
-
-        String filename =  prefixe + "-img.jpg";
+                BufferedImage.TYPE_3BYTE_BGR ); //création de l'image, format
+		
+		this.impression=(Graphics2D)this.image.getGraphics(); //conversion
+		
+		
+        for( int i =0; i < h; i++ ){
 
 
-        for( int i =0; i < X; i++ ){
-
-
-
-            for( int j =0; j < Y; j++ ){
-
-
+            for( int j =0; j < l; j++ ){
 
                 x = i * PIX_SIZE;
 
                 y = j * PIX_SIZE;
+//
+                if ( (( x-x0)*( x-x0))+(( y-y0)*( y-y0)) < R*R ){
 
-               // équation du dessin (cercle)
-
-               if ( (( x-x0)*( x-x0))+(( y-y0)*( y-y0)) < R*R ){
-
-            	   teinte= seuilmin+aleatoire.nextInt(256-seuilmin);
-					if(teinte>=256){
-						teinte= aleatoire.nextInt(256);
-					                   }
-					else{
-						g.setColor( new Color(teinte, teinte, teinte) );
-					}
-              
-					//teinte= seuilmin+aleatoire.nextInt(256-seuilmin);
-                   
-
-
-               }else{
-
-            	   teinte= aleatoire.nextInt(seuilmax+1);
-            	   if(teinte>=0 && teinte<seuilmax){
-                   g.setColor( new Color(teinte, teinte, teinte) );
-            	   }
-            	   else{
-            		   teinte= aleatoire.nextInt(seuilmax+1);
-            	   }
-
+             	   teinte= seuilmin+aleatoire.nextInt(256-seuilmin);
+ 					if(teinte>=256){
+ 						teinte= aleatoire.nextInt(256);
+ 					                   }
+ 					else{
+ 						g.setColor( new Color(teinte, teinte, teinte) );
+ 					}
                
+ 					//teinte= seuilmin+aleatoire.nextInt(256-seuilmin);
+                    
+                }
+//
+                //System.out.println(lambdaBorne);
+            	lambdaBruit= (aleatoire.nextInt((int)seuilBruit*10)*largeurBande/2)+lambdaBorne;
+            	
+            	System.out.println("Longueur d'onde écrite (avec bruit) = "+lambdaBruit+" nm.");
+            	int nivGris=(int)(lambdaBruit%lambdaBorne);// Pour prendre en compte le decalage 1 -> 255 RGB
+            	System.out.println(nivGris);
+            	if(nivGris>=0){
+            		
+                   this.impression.setColor( new Color(nivGris, nivGris, nivGris) );
+                   //System.out.println(this.impression.getColor());
+            	   
+            	}
+            	
+            	else{
 
-               }
-
-
+            		System.out.println("Erreur");
+            		System.out.println(this.impression.getColor());
+            	   
+            	}
 
                //fil the rectangles with the pixel blocks in chosen color
                
-               //System.out.println(g.getColor());
+               System.out.println(this.impression.getColor());
                
-               graph.fillRect( y, x , PIX_SIZE , PIX_SIZE );
-
-        
+               this.impression.fillRect( y, x , PIX_SIZE , PIX_SIZE );
 
             }
 
-        
 
         }
 
-        
-
-        graph.dispose();
-		
-		
-	}*/
+	} */
 }
